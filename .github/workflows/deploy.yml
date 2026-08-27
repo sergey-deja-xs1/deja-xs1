@@ -22,8 +22,6 @@ jobs:
 
       - run: npm run build --workspaces
 
-      # This is the step that fails the moment producer's schema drifts
-      # from consumer's copy of it — the intended breaking-change signal.
       - name: Run producer then consumer against the same event log
         run: |
           rm -f events.jsonl
@@ -40,8 +38,6 @@ jobs:
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
       SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-      # This org is EU-region; sentry-cli defaults to the US endpoint and
-      # fails against an EU org without this.
       SENTRY_URL: ${{ secrets.SENTRY_URL || 'https://de.sentry.io/' }}
     steps:
       - uses: actions/checkout@v4
@@ -70,8 +66,6 @@ jobs:
             });
 
       - name: Notify Sentry of the deploy
-        # env (not secrets) — the secrets context is not available to a
-        # step-level `if`. The vars must be on the job for this to work.
         if: ${{ env.SENTRY_AUTH_TOKEN != '' }}
         uses: getsentry/action-release@v1
         with:

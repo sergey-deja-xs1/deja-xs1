@@ -29,8 +29,6 @@ function processReceiptEvents(): number {
 
 const rejected = processReceiptEvents();
 
-// captureException only queues; the process would exit before the HTTP
-// request completes without this.
 await Sentry.flush(5000);
 
 if (rejected > 0) {
