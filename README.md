@@ -24,3 +24,10 @@ node consumer/dist/index.js
 
 - `SENTRY_DSN`
 - `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT` (Sentry deploy notification; step is skipped if unset)
+
+## Deploy workflow
+
+Runs on every push to `main`: installs deps, builds both workspaces, runs
+producer then consumer against the same event log (this is the step that
+fails when the schema drifts), then creates a GitHub Deployment and — if
+Sentry secrets are set — notifies Sentry of the release.
