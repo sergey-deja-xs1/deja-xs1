@@ -3,7 +3,9 @@ import { z } from "zod";
 export const ReceiptEventSchema = z.object({
   eventId: z.string(),
   receiptId: z.string(),
-  amountCents: z.number().int(),
+  // Renamed from `amountCents` to `amount` (now a decimal) to match the
+  // new billing UI. Consumer was not updated — see consumer/src/schema.ts.
+  amount: z.number(),
   currency: z.string(),
   issuedAt: z.string().datetime(),
 });

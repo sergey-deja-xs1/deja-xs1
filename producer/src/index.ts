@@ -19,8 +19,8 @@ function emitReceiptEvent(input: Omit<ReceiptEvent, "eventId" | "issuedAt">): Re
 }
 
 try {
-  emitReceiptEvent({ receiptId: "rcpt_001", amountCents: 4200, currency: "USD" });
-  emitReceiptEvent({ receiptId: "rcpt_002", amountCents: 1999, currency: "USD" });
+  emitReceiptEvent({ receiptId: "rcpt_001", amount: 42.0, currency: "USD" });
+  emitReceiptEvent({ receiptId: "rcpt_002", amount: 19.99, currency: "USD" });
 } catch (err) {
   Sentry.captureException(err);
   throw err;
