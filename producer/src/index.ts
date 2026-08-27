@@ -23,5 +23,6 @@ try {
   emitReceiptEvent({ receiptId: "rcpt_002", amount: 19.99, currency: "USD" });
 } catch (err) {
   Sentry.captureException(err);
+  await Sentry.flush(5000);
   throw err;
 }
