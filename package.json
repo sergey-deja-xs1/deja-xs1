@@ -1,0 +1,5 @@
+{
+  "name": "deja-xs1",
+  "private": true,
+  "workspaces": ["producer", "consumer"]
+}
