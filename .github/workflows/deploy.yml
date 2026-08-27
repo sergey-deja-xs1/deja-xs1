@@ -9,7 +9,7 @@ permissions:
   deployments: write
 
 jobs:
-  build-and-verify:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,17 +22,8 @@ jobs:
 
       - run: npm run build --workspaces
 
-      - name: Run producer then consumer against the same event log
-        run: |
-          rm -f events.jsonl
-          node producer/dist/index.js
-          node consumer/dist/index.js
-        env:
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          NODE_ENV: production
-
   deploy:
-    needs: build-and-verify
+    needs: build
     runs-on: ubuntu-latest
     env:
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -71,3 +62,27 @@ jobs:
         with:
           environment: production
           version: ${{ github.sha }}
+
+  smoke:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      - run: npm run build --workspaces
+
+      - name: Run producer then consumer against the same event log
+        run: |
+          rm -f events.jsonl
+          node producer/dist/index.js
+          node consumer/dist/index.js
+        env:
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          SENTRY_RELEASE: ${{ github.sha }}
+          NODE_ENV: production
