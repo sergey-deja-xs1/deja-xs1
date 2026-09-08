@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const SUPPORTED_CURRENCIES = ["USD", "EUR", "GBP"] as const;
+export const SUPPORTED_CURRENCIES = ["USD", "EUR", "GBP", "CHF", "CAD"] as const;
 
 export const ReceiptEventSchema = z.object({
   eventId: z.string(),
